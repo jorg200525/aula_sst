@@ -1,7 +1,0 @@
-streamlit
-ollama
-gtts
-SpeechRecognition
-streamlit-mic-recorder
-faster-whisper
-edge-tts
