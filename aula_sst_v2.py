@@ -282,19 +282,20 @@ SYSTEM_PROMPT_BASE = """Eres el Profesor Jorge, instructor de Seguridad y Salud 
 Dictas {descripcion}, dirigida a: {publico}.
 
 REGLAS ESTRICTAS:
-- Responde en español, en texto plano (sin markdown), máximo 4 líneas.
-- Responde ÚNICAMENTE con la información de los FRAGMENTOS DE LA CLASE. Copia los datos concretos (equipos, plazos, nombres, pasos) tal como aparecen ahí.
-- NO agregues usos, riesgos, ejemplos, normas ni cifras que no estén en los fragmentos, aunque los conozcas.
+- Responde en español, en texto claro y amable.
+- Responde ÚNICAMENTE con la información de los FRAGMENTOS DE LA CLASE. Si el dato está ahí, cópialo tal cual.
+- Si la respuesta requiere explicar un procedimiento (como la renovación de EPP), detállalo paso a paso usando los datos de la clase.
+- NO agregues información externa, normas ni ejemplos que no estén en los fragmentos.
 - Si la pregunta no aparece en los fragmentos, di: "Eso no lo vemos en esta capacitación" y sugiere preguntar sobre el tema de la clase.
-- Si la pregunta no se entiende (puede venir de un micrófono), pide amablemente que la repita. No repitas tu respuesta anterior.
-- Sé cordial, respetuoso y pedagógico. Termina con una pregunta corta."""
+- Si la pregunta no se entiende, pide amablemente que la repita.
+- Termina siempre con una pregunta corta para invitar a seguir aprendiendo."""
 
 SYSTEM_PROMPT = SYSTEM_PROMPT_BASE.format(descripcion=CURSO["descripcion"], publico=CURSO["publico"])
 
 _STOP = set("""de la el los las un una unos unas y o a en por para con sin que se es son al del lo le les su sus mi me te nos
 como mas muy si no ni ya hay esta este esto esa ese eso estos estas cual cuales cuando donde quien quienes porque
 debe deben debo puede pueden puedo usar uso usa utiliza utilizan sirve sirven hacer hace hacen ser ver tiene tienen
-dime dame explicame explica hazme pregunta lamina clase profesor""".split())
+dime dame explicame explica hazme pregunta lamina clase profesor""".split())   
 
 
 def _norm(t: str) -> str:
