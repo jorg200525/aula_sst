@@ -350,7 +350,7 @@ def stream_profesor(pregunta: str, n: int, historial: list):
             model=MODELO_GROQ,
             messages=construir_mensajes(pregunta, n, historial),
             temperature=0.1,
-            max_tokens=250,
+            max_tokens=1500,
             stream=True
         )
         for chunk in stream:
