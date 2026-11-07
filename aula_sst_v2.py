@@ -1,6 +1,6 @@
 import streamlit as st
 import streamlit.components.v1 as components
-import ollama
+from groq import Groq 
 from gtts import gTTS
 import speech_recognition as sr
 from streamlit_mic_recorder import mic_recorder
