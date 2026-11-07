@@ -43,7 +43,7 @@ CARPETA_AUDIO = BASE / "audio_cache"     # el audio de cada lámina se guarda aq
 
 MODELO_GROQ = "openai/gpt-oss-120b"  
 STT_MOTOR = "whisper"      # voz -> texto: "whisper" (offline) | "google" (online)
-WHISPER_MODELO = "small"    # "base" (rápido, menos preciso) | "small" (recomendado) | "medium" (lento en CPU)
+WHISPER_MODELO = "medium"    # "base" (rápido, menos preciso) | "small" (recomendado) | "medium" (lento en CPU)
 TTS_MOTOR = "edge"         # texto -> voz: "edge" (online, natural) | "gtts" | "pyttsx3" (offline)
 VOZ_EDGE = "es-PE-AlexNeural"  # otras: "es-PE-CamilaNeural", "es-MX-JorgeNeural", "es-ES-AlvaroNeural"
 VELOCIDAD_EDGE = "-5%"     # más pausado, tipo clase
@@ -246,14 +246,25 @@ def transcribir_audio(audio_bytes: bytes):
             if len(audio) < 8000 or float(abs(audio).max()) < 0.01:      # muy corto o silencio
                 st.session_state.error_audio = "El audio es muy corto o casi no se oye (revisa el micrófono)."
                 return None
-            pista = f"Pregunta de un trabajador sobre seguridad y salud en el trabajo. Vocabulario: {CURSO['vocabulario']}."
+            
+            # Pista mejorada con puntuación y contexto
+            pista = "Preguntas sobre seguridad y salud en el trabajo. El trabajador dice: ¿Para qué sirve el guante anticorte? ¿Cuándo se cambia el casco? EPP, EPC, procedimiento, supervisor, protección."
+            
             segmentos, _ = cargar_whisper().transcribe(
-                audio, language="es", beam_size=5, initial_prompt=pista,
-                condition_on_previous_text=False)
+                audio, 
+                language="es", 
+                beam_size=5, 
+                initial_prompt=pista,
+                condition_on_previous_text=False,
+                vad_filter=True  # <--- ESTO ES LO NUEVO: Filtra los silencios y mejora la precisión
+            )
+            
             texto = " ".join(seg.text for seg in segmentos).strip()
             return texto or None
         except Exception as e:
             st.session_state.error_audio = f"Whisper: {e}"
+            
+    # Si Whisper falla, usa Google (que también es muy bueno)
     try:
         texto = _transcribir_google(audio_bytes)
         st.session_state.pop("error_audio", None)
@@ -261,7 +272,7 @@ def transcribir_audio(audio_bytes: bytes):
     except Exception as e:
         prev = st.session_state.get("error_audio", "")
         st.session_state.error_audio = (prev + " | " if prev else "") + f"Google: {e}"
-        return None
+        return None    
 
 
 # =======================================================
