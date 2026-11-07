@@ -41,7 +41,7 @@ CARPETA_LAMINAS = BASE / "laminas"       # imágenes de tus diapositivas (PNG/JP
 ARCHIVO_GUIONES = BASE / "guiones.json"  # guion de dictado de cada lámina (editable)
 CARPETA_AUDIO = BASE / "audio_cache"     # el audio de cada lámina se guarda aquí (se genera 1 sola vez)
 
-MODELO_GROQ = "llama-3.3-70b-versatile" # Modelo potente y rápido de Groq
+MODELO_GROQ = "openai/gpt-oss-120b"  
 STT_MOTOR = "whisper"      # voz -> texto: "whisper" (offline) | "google" (online)
 WHISPER_MODELO = "small"    # "base" (rápido, menos preciso) | "small" (recomendado) | "medium" (lento en CPU)
 TTS_MOTOR = "edge"         # texto -> voz: "edge" (online, natural) | "gtts" | "pyttsx3" (offline)
