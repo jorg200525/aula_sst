@@ -336,12 +336,15 @@ def construir_mensajes(pregunta: str, n: int, historial: list) -> list:
 
 
 def stream_profesor(pregunta: str, n: int, historial: list):
-    """Genera la respuesta usando Groq en lugar de Ollama."""
+    """Genera la respuesta usando Groq."""
     if not IA_DISPONIBLE:
-        yield "El asistente no está disponible en este momento porque falta configurar la API Key."
+        yield "⚠️ Error: La API Key de Groq no está configurada en los Secrets."
         return
         
     try:
+        # Imprimimos en la consola para saber si la clave está llegando
+        print(f"DEBUG: Conectando a Groq con modelo {MODELO_GROQ}...")
+        
         stream = cliente_groq.chat.completions.create(
             model=MODELO_GROQ,
             messages=construir_mensajes(pregunta, n, historial),
@@ -353,7 +356,8 @@ def stream_profesor(pregunta: str, n: int, historial: list):
             if chunk.choices[0].delta.content is not None:
                 yield chunk.choices[0].delta.content
     except Exception as e:
-        yield f"Error al conectar con la IA: {e}"
+        # Si hay un error, lo mostramos en el chat
+        yield f"⚠️ Error de Groq: {str(e)}"  
 
 
 # =======================================================
